@@ -4,10 +4,10 @@ CONFIG -= app_bundle
 CONFIG += qt
 
 SOURCES += \
-        calendar.cpp \
-        date.cpp \
+        Sources/calendar.cpp \
+        Sources/date.cpp \
         main.cpp
 
 HEADERS += \
-    calendar.h \
-    date.h
+    Headers/calendar.h \
+    Headers/date.h
