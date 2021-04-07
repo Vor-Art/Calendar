@@ -56,13 +56,14 @@ public:
     friend std::ostream &operator << (std::ostream& out, const Date::Month& month);
     friend std::ostream &operator << (std::ostream& out, const Date::DayOfWeek& day);
     friend std::ostream &operator << (std::ostream& out, const Date& date);
-    friend std::istream &operator >> (std::istream &in, Date& date);
+    friend std::istream &operator >> (std::istream& in, Date& date);
 
     bool operator!=(const Date & other) const;
     bool operator==(const Date & other) const;
     bool operator<(const Date & other) const;
 
-    Date &operator+=(size_t shift);
+    Date &operator+=(int shift);
+    Date &operator-=(int shift);
     const Date &operator = (const Date & other);
     int64_t operator-(const Date & other) const;
     explicit operator std::string() const;

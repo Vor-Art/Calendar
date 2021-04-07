@@ -26,13 +26,13 @@ std::ostream &operator << (std::ostream& out, const Date& date)
 std::ostream &operator << (std::ostream& out, const Date::DayOfWeek& day)
 {
     switch (day) {
-        case Date::DayOfWeek::MONDAY    : return out << "Monday";
-        case Date::DayOfWeek::TUESDAY   : return out << "Tuesday";
-        case Date::DayOfWeek::THURSDAY  : return out << "Thursday";
-        case Date::DayOfWeek::WEDNESDAY : return out << "Wednesday";
-        case Date::DayOfWeek::SATURDAY  : return out << "Saturday";
-        case Date::DayOfWeek::FRIDAY    : return out << "Friday";
-        case Date::DayOfWeek::SUNDAY    : return out << "Sunday";
+    case Date::DayOfWeek::MONDAY    : return out << "Monday";
+    case Date::DayOfWeek::TUESDAY   : return out << "Tuesday";
+    case Date::DayOfWeek::THURSDAY  : return out << "Thursday";
+    case Date::DayOfWeek::WEDNESDAY : return out << "Wednesday";
+    case Date::DayOfWeek::SATURDAY  : return out << "Saturday";
+    case Date::DayOfWeek::FRIDAY    : return out << "Friday";
+    case Date::DayOfWeek::SUNDAY    : return out << "Sunday";
     }
     return out;
 }
@@ -40,18 +40,18 @@ std::ostream &operator << (std::ostream& out, const Date::DayOfWeek& day)
 std::ostream &operator << (std::ostream& out, const Date::Month& month)
 {
     switch (month) {
-        case Date::Month::JANUARY   : return out << "January";
-        case Date::Month::FEBRUARY  : return out << "February";
-        case Date::Month::MARCH     : return out << "March";
-        case Date::Month::APRIL     : return out << "April";
-        case Date::Month::MAY       : return out << "May";
-        case Date::Month::JUNE      : return out << "June";
-        case Date::Month::JULY      : return out << "July";
-        case Date::Month::AUGUST    : return out << "August";
-        case Date::Month::SEPTEMBER : return out << "September";
-        case Date::Month::OCTOBER   : return out << "October";
-        case Date::Month::NOVEMBER  : return out << "November";
-        case Date::Month::DECEMBER  : return out << "December";
+    case Date::Month::JANUARY   : return out << "January";
+    case Date::Month::FEBRUARY  : return out << "February";
+    case Date::Month::MARCH     : return out << "March";
+    case Date::Month::APRIL     : return out << "April";
+    case Date::Month::MAY       : return out << "May";
+    case Date::Month::JUNE      : return out << "June";
+    case Date::Month::JULY      : return out << "July";
+    case Date::Month::AUGUST    : return out << "August";
+    case Date::Month::SEPTEMBER : return out << "September";
+    case Date::Month::OCTOBER   : return out << "October";
+    case Date::Month::NOVEMBER  : return out << "November";
+    case Date::Month::DECEMBER  : return out << "December";
     }
     return out;
 }
@@ -105,8 +105,8 @@ Date::Date(size_t year, size_t month, size_t day)
 
     this->month = static_cast<Month>(month);
 
-    if (day > getMaxNumberDay())
-        throw std::runtime_error({"Day '%u'  out of range '%u'",day, getMaxNumberDay()});
+    if (day > getMaxNumberDay() && day)
+        throw std::runtime_error({"Day '%u'  out of range '[1,%u]'",day, getMaxNumberDay()});
 
     this->day = day;
 }
@@ -153,18 +153,37 @@ bool Date::operator<(const Date &other) const
             ((year == other.year) && (month == other.month) && (day < other.day));
 }
 
-Date &Date::operator+=(size_t shift)
+Date &Date::operator+=(int shift)
 {
+    if (shift < 0) return this->operator-=(-shift);
     day += shift;
     size_t count = 0;
-    while (day > getMaxNumberDay()){       
+    while (day > getMaxNumberDay()){
         day -= getMaxNumberDay();
-        size_t index_of_next_month = (static_cast<size_t>(month) + 1) % static_cast<size_t>(Month::COUNT);
-        if (!index_of_next_month)
-            count ++;
+        size_t index_of_next_month = static_cast<size_t>(month) % static_cast<size_t>(Month::COUNT) + 1;
+        if (index_of_next_month == 1)
+            count++;
         month = static_cast <Month> (index_of_next_month);
     }
     year += count;
+    return *this;
+}
+
+Date &Date::operator-=(int shift)
+{
+    if (shift < 0) return this->operator+=(-shift);
+    size_t count = 0;
+    while (day <= shift){
+        shift -= day;
+        size_t index_of_next_month = (static_cast<size_t>(month) + static_cast<size_t>(Month::COUNT) - 2) % static_cast<size_t>(Month::COUNT) + 1;
+        if (index_of_next_month == static_cast<size_t>(Month::COUNT))
+            count ++;
+        month = static_cast <Month> (index_of_next_month);
+
+        day = getMaxNumberDay();
+    }
+    day -= shift;
+    year -= count;
     return *this;
 }
 

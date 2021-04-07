@@ -7,6 +7,33 @@
 #include <sstream>
 #include <iomanip>
 
+void test_iterator_operators(Calendar_DS::iterator It){
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(++It) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(It++) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(It--) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(--It) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(It+=30) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 35; ++i)
+            std::cout<< *(It-=30) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 2; ++i)
+            std::cout<< *(It+365) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+        for (int i = 0; i < 2; ++i)
+            std::cout<< *(It-365) << std::endl;
+        std::cout<< "~~~~~" << std::endl;
+}
+
 int main()
 {
 
@@ -26,6 +53,8 @@ int main()
     Outlook.events.emplace_back(my_next_birthday, "My Next Birthday");
     Calendar_DS::iterator begin = Outlook.it();
     Calendar_DS::iterator end = Outlook.itEvent(0);
+
+//    test_iterator_operators(begin);
 
     std::cout << Outlook.printEvents();
     std::cout <<".\n.\n."<< std::endl;

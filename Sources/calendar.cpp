@@ -132,7 +132,7 @@ const Calendar_DS::iterator &Calendar_DS::iterator::operator++()
 
 const Calendar_DS::iterator &Calendar_DS::iterator::operator--()
 {
-    p += 1;
+    p += -1;
     return *this;
 }
 
